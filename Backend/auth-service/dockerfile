@@ -1,20 +1,18 @@
-# Use Node base image
-FROM node:20
+#FROM node:18-alpine
+#WORKDIR /app
+#COPY package*.json ./
+#RUN npm install
+#COPY . .
+#CMD ["npm", "start"] 
 
-# Set working directory
+FROM node:18-alpine AS Builder
 WORKDIR /app
-
-# Copy package files
 COPY package*.json ./
+RUN npm ci --only=production
 
-# Install dependencies
-RUN npm install
-
-# Copy all files
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=Builder /app/package*.json ./
+COPY --from=Builder /app/node_modules ./node_modules
 COPY . .
-
-# Expose port
-EXPOSE 3001
-
-# Start app
-CMD ["node", "server.js"]
+CMD ["npm", "start"]

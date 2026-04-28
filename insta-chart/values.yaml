@@ -1,0 +1,20 @@
+services:
+  - name: auth-service
+    image: auth-service:latest
+    port: 3001
+    nodePort: 30080
+
+  - name: media-service
+    image: media-service:latest
+    port: 3002
+    nodePort: 30081
+
+  - name: post-service
+    image: post-service:latest
+    port: 3003
+    nodePort: 30082
+
+  - name: user-service
+    image: user-service:latest
+    port: 3004
+    nodePort: 30083
