@@ -51,9 +51,9 @@ jobs:
       # 9. Health Check Example (change port if needed)
       - name: Health Check Application
         run: |
-          curl -f http://localhost:3000 || exit 1
+          curl -f http://localhost:8080 || exit 1
 
       # 10. Cleanup Always
       - name: Stop Containers
-        if: always()
         run: docker compose down
+        if: always()
