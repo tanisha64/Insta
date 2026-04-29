@@ -1,14 +1,54 @@
-
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  build-test-run:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - run: ls -la
+      # Step 1: Checkout Repository Code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Show Files (for debug)
+      - name: Show Project Files
+        run: ls -la
+
+      # Step 3: Install Docker Compose (optional safety)
+      - name: Check Docker Version
+        run: |
+          docker --version
+          docker compose version
+
+      # Step 4: Build All Services from docker-compose.yml
+      - name: Build Containers
+        run: docker compose build
+
+      # Step 5: Start Containers in Background
+      - name: Start Containers
+        run: docker compose up -d
+
+      # Step 6: Wait for Services
+      - name: Wait for Containers
+        run: sleep 15
+
+      # Step 7: Show Running Containers
+      - name: Check Running Containers
+        run: docker ps
+
+      # Step 8: Show Logs (optional debug)
+      - name: Show Container Logs
+        run: docker compose logs
+
+      # Step 9: Stop and Clean Containers
+      - name: Stop Containers
+        if: always()
+        run: docker compose down
