@@ -16,23 +16,8 @@ spec:
       containers:
         - name: {{ .name }}
           image: {{ .image }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: {{ .port }}
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .name }}
-spec:
-  type: NodePort
-  selector:
-    app: {{ .name }}
-  ports:
-    - port: {{ .port }}
-      targetPort: {{ .port }}
-      nodePort: {{ .nodePort }}
-
 ---
 {{- end }}
